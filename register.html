@@ -1,67 +1,210 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>ForumOne MUN — Official Site</title>
-<meta name="description" content="ForumOne Model United Nations — debate, diplomacy, impact.">
-<link rel="icon" href="/assets/favicon.svg">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/assets/style.css">
-<script defer src="/assets/site.js"></script>
-
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Register — ForumOne MUN</title>
+  <meta name="description" content="Register for ForumOne Model United Nations.">
+  <link rel="icon" href="/assets/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/style.css">
 </head>
 <body>
-<header class="nav">
-  <div class="container flex between center">
-    <a class="brand" href="/"><img src="/assets/logo-forumone.svg" alt="ForumOne MUN" /></a>
-    <button class="hamburger" aria-label="Open menu" onclick="toggleMenu()">☰</button>
-    <nav class="links" id="navlinks">
-      <a href="/committees.html">Committees</a>
-      <a href="/secretariat.html">Secretariat</a>
-      <a href="/register.html">Register</a>
-      <a href="/contact.html">Contact</a>
-      <a class="btn" href="/register.html">Get Tickets</a>
-    </nav>
-  </div>
-</header>
+  <!-- Navbar -->
+  <header class="nav">
+    <div class="container flex between center">
+      <a class="brand" href="/"><img src="/assets/logo-forumone.svg" alt="ForumOne MUN" /></a>
+      <button class="hamburger" aria-label="Open menu" onclick="toggleMenu()">☰</button>
+      <nav class="links" id="navlinks">
+        <a href="/committees.html">Committees</a>
+        <a href="/secretariat.html">Secretariat</a>
+        <a href="/register.html">Register</a>
+        <a href="/contact.html">Contact</a>
+        <a class="btn" href="/register.html">Get Tickets</a>
+      </nav>
+    </div>
+  </header>
 
-<main class="main">
-  <h1>Register</h1>
-  <p class="muted">Delegate and school registrations open soon. Follow our Instagram for release dates.</p>
-  <div class="card">
-    <h2>Early Interest</h2>
-    <p>Share your interest to get notified first.</p>
-    <p><a class="btn primary" href="https://forms.gle/" target="_blank" rel="noreferrer">Fill Interest Form</a></p>
-    <p class="muted small">Replace the link above with your actual Google Form.</p>
-  </div>
-</main>
-<footer class="footer">
-  <div class="container grid3">
-    <div>
-      <h3>ForumOne MUN</h3>
-      <p>A student-driven Model United Nations conference fostering debate, diplomacy and leadership.</p>
-    </div>
-    <div>
-      <h4>Quick Links</h4>
-      <ul class="list">
-        <li><a href="/committees.html">Committees</a></li>
-        <li><a href="/secretariat.html">Secretariat</a></li>
-        <li><a href="/register.html">Register</a></li>
-        <li><a href="/contact.html">Contact</a></li>
-      </ul>
-    </div>
-    <div>
-      <h4>Social</h4>
-      <ul class="list">
-        <li><a href="https://www.instagram.com/forumone.mun/" target="_blank" rel="noreferrer">Instagram @forumone.mun</a></li>
-      </ul>
-      <p class="muted small">© <span id="year"></span> ForumOne MUN. All rights reserved.</p>
-    </div>
-  </div>
-</footer>
+  <main class="main">
+    <h1>Register</h1>
+    <p class="muted">Fill this form to register. A confirmation will be emailed to you.</p>
 
+    <!-- Inline status area -->
+    <div id="status" class="card" style="display:none; margin-top:16px"></div>
+
+    <div class="card" style="margin-top:16px">
+      <!-- AJAX Registration Form (emails to mithipy@gmail.com) -->
+      <form id="reg-form" novalidate>
+        <!-- Form options (sent via JSON to FormSubmit AJAX endpoint) -->
+        <input type="hidden" name="_subject" value="ForumOne MUN — New Registration">
+        <input type="hidden" name="_template" value="table">
+        <input type="hidden" name="_captcha" value="false">
+        <input type="hidden" name="_autoresponse" value="Thank you for registering for ForumOne MUN! We’ve received your details and will get back to you shortly.">
+        <!-- Honeypot -->
+        <input type="text" name="_honey" style="display:none">
+
+        <div class="grid2">
+          <div>
+            <label class="lbl">Full Name</label>
+            <input class="inp" name="Full Name" placeholder="Your full name" required>
+
+            <label class="lbl">Email</label>
+            <input class="inp" type="email" name="Email" placeholder="you@example.com" required>
+
+            <label class="lbl">Phone</label>
+            <input class="inp" type="tel" name="Phone" placeholder="+91-XXXXXXXXXX" required>
+
+            <label class="lbl">School / College</label>
+            <input class="inp" name="Institution" placeholder="Institution name" required>
+          </div>
+
+          <div>
+            <label class="lbl">City</label>
+            <input class="inp" name="City" placeholder="City" required>
+
+            <label class="lbl">Grade / Year</label>
+            <input class="inp" name="Grade / Year" placeholder="e.g., Class 11 / 2nd Year" required>
+
+            <label class="lbl">Role</label>
+            <select class="inp" name="Role" required>
+              <option value="">Select…</option>
+              <option>Delegate</option>
+              <option>Observer</option>
+              <option>Executive Board (EB)</option>
+            </select>
+
+            <label class="lbl">Committee Preference</label>
+            <select class="inp" name="Committee Preference" required>
+              <option value="">Select…</option>
+              <option>UNGA</option>
+              <option>UNSC</option>
+              <option>ECOSOC</option>
+              <option>WHO</option>
+              <option>UNHRC</option>
+              <option>Any</option>
+            </select>
+          </div>
+        </div>
+
+        <label class="lbl" style="margin-top:12px">Previous MUN Experience (brief)</label>
+        <textarea class="inp" name="Experience" rows="4" placeholder="Chairs attended, awards, conferences, etc."></textarea>
+
+        <label class="lbl" style="margin-top:12px">Notes / Questions</label>
+        <textarea class="inp" name="Notes" rows="3" placeholder="Anything else we should know?"></textarea>
+
+        <label class="lbl" style="margin-top:12px">
+          <input type="checkbox" name="Agree to Terms" required>
+          I confirm the details are accurate and agree to be contacted about ForumOne MUN.
+        </label>
+
+        <button id="submitBtn" class="btn primary" type="submit" style="margin-top:14px">Submit Registration</button>
+        <p class="muted small" style="margin-top:8px">
+          Submitting won’t leave this page. For first-time setup, FormSubmit will send a one-time verification email to
+          <strong>mithipy@gmail.com</strong>. You’ll need to click that once (in your inbox) to start receiving entries.
+        </p>
+      </form>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container grid3">
+      <div>
+        <h3>ForumOne MUN</h3>
+        <p>A student-driven Model United Nations conference fostering debate, diplomacy and leadership.</p>
+      </div>
+      <div>
+        <h4>Quick Links</h4>
+        <ul class="list">
+          <li><a href="/committees.html">Committees</a></li>
+          <li><a href="/secretariat.html">Secretariat</a></li>
+          <li><a href="/register.html">Register</a></li>
+          <li><a href="/contact.html">Contact</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Social</h4>
+        <ul class="list">
+          <li><a href="https://www.instagram.com/forumone.mun/" target="_blank" rel="noreferrer">Instagram @forumone.mun</a></li>
+        </ul>
+        <p class="muted small">© <span id="year"></span> ForumOne MUN. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Minimal JS (no site.js dependency needed) -->
+  <script>
+    // mobile nav toggle
+    function toggleMenu(){
+      var nav = document.getElementById('navlinks');
+      if(nav) nav.classList.toggle('open');
+    }
+
+    // Inline submit handler (AJAX, no redirect)
+    (function(){
+      const form = document.getElementById('reg-form');
+      const status = document.getElementById('status');
+      const btn = document.getElementById('submitBtn');
+      const ENDPOINT = 'https://formsubmit.co/ajax/mithipy@gmail.com';
+
+      function showStatus(type, msg){
+        status.style.display = 'block';
+        status.className = 'card'; // reset
+        if(type === 'success'){ status.style.borderColor = 'rgba(34,197,94,.5)'; } // green-ish border
+        if(type === 'error'){ status.style.borderColor = 'rgba(239,68,68,.5)'; }   // red-ish border
+        status.innerHTML = msg;
+        // scroll into view on mobile
+        status.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+
+      form.addEventListener('submit', async function(e){
+        e.preventDefault();
+        // Basic required check
+        if(!form.checkValidity()){
+          showStatus('error', '<strong>Please fill all required fields.</strong>'); 
+          return;
+        }
+
+        btn.disabled = true;
+        const prev = btn.textContent;
+        btn.textContent = 'Submitting…';
+
+        // Build JSON payload from the form
+        const data = {};
+        Array.from(new FormData(form).entries()).forEach(([k,v]) => data[k] = v);
+
+        try {
+          const res = await fetch(ENDPOINT, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+            body: JSON.stringify(data)
+          });
+
+          if(!res.ok){
+            const t = await res.text();
+            throw new Error('Network response was not ok: ' + t);
+          }
+          const json = await res.json();
+
+          // Show success inline (no page change)
+          showStatus('success', '<strong>Registered!</strong> We’ve received your details. Please check your email for any updates.');
+          form.reset();
+        } catch (err) {
+          showStatus('error', 'Sorry, something went wrong while submitting. Please try again in a moment.');
+          console.error(err);
+        } finally {
+          btn.disabled = false;
+          btn.textContent = prev;
+        }
+      });
+
+      // Set footer year
+      const y = document.getElementById('year');
+      if(y) y.textContent = new Date().getFullYear();
+    })();
+  </script>
 </body>
 </html>
+

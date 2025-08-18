@@ -10,13 +10,12 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/assets/style.css">
-  <script defer src="/assets/site.js"></script>
 </head>
 <body>
   <!-- Navbar -->
   <header class="nav">
     <div class="container flex between center">
-      <a class="brand" href="/"><img src="/assets/logo-forumone.svg" alt="ForumOne MUN" /></a>
+      <a class="brand" href="/"><img src="/assets/logo-forumone.svg" alt="ForumOne MUN" style="height:34px" /></a>
       <button class="hamburger" aria-label="Open menu" onclick="toggleMenu()">☰</button>
       <nav class="links" id="navlinks">
         <a href="/committees.html">Committees</a>
@@ -30,29 +29,27 @@
 
   <main class="main">
     <h1>Contact</h1>
-    <p class="muted">Have questions? Reach out to us — we’ll reply to your email.</p>
+    <p class="muted">Have questions? Send us a message — we’ll reply to your email.</p>
+
+    <!-- Inline status (hidden until used) -->
+    <div id="status" class="card" style="display:none; margin-top:16px"></div>
 
     <div class="grid2" style="margin-top:16px">
       <!-- Info card -->
       <div class="card">
         <h2>General Queries</h2>
-        <p>Email: <a class="underline" href="mailto:forumonemun@gmail.com">forumonemun@gmail.com</a></p>
+        <p>Email: <a class="underline" href="mailto:forumone178@gmail.com">forumone178@gmail.com</a></p>
         <p>Instagram: <a class="underline" href="https://www.instagram.com/forumone.mun/" target="_blank" rel="noreferrer">@forumone.mun</a></p>
-        <p class="muted small">Or use the form — it’ll email your message to <strong>jayantpatanik@gmail.com</strong>.</p>
+        <p class="muted small">Form messages are delivered to <strong>forumone178@gmail.com</strong>.</p>
       </div>
 
-      <!-- Contact form (FormSubmit) -->
-      <form
-        class="card"
-        action="https://formsubmit.co/jayantpatanik@gmail.com"
-        method="POST"
-      >
+      <!-- AJAX Contact Form -->
+      <form id="contact-form" class="card" novalidate>
         <!-- FormSubmit options -->
-        <input type="hidden" name="_subject" value="ForumOne MUN — New Contact Submission">
+        <input type="hidden" name="_subject" value="ForumOne MUN — New Contact Message">
         <input type="hidden" name="_template" value="table">
         <input type="hidden" name="_captcha" value="false">
-        <!-- Optional: replace with your own thank-you page URL -->
-        <!-- <input type="hidden" name="_next" value="https://your-domain.com/thanks.html"> -->
+        <input type="hidden" name="_autoresponse" value="Thanks for reaching out to ForumOne MUN! We’ve received your message and will get back to you shortly.">
         <!-- Honeypot (spam protection) -->
         <input type="text" name="_honey" style="display:none">
 
@@ -62,13 +59,21 @@
         <label class="lbl">Email</label>
         <input class="inp" type="email" name="Email" placeholder="you@example.com" required>
 
+        <label class="lbl">Subject</label>
+        <input class="inp" name="Subject" placeholder="Subject">
+
         <label class="lbl">Message</label>
         <textarea class="inp" name="Message" rows="4" placeholder="Your message" required></textarea>
 
-        <button class="btn primary" type="submit" style="margin-top:12px">Send Message</button>
+        <label class="lbl" style="margin-top:12px">
+          <input type="checkbox" name="Consent" required>
+          I agree to be contacted about my query.
+        </label>
+
+        <button id="sendBtn" class="btn primary" type="submit" style="margin-top:12px">Send Message</button>
         <p class="muted small" style="margin-top:8px">
-          Powered by <a class="underline" href="https://formsubmit.co" target="_blank" rel="noreferrer">FormSubmit</a>.
-          The first submission will trigger a one-time confirmation email to activate deliveries to your inbox.
+          Powered by <a class="underline" href="https://formsubmit.co" target="_blank" rel="noreferrer">FormSubmit</a>. 
+          First-time use sends a one-time verification to <strong>forumone178@gmail.com</strong> (organizer only).
         </p>
       </form>
     </div>
@@ -99,5 +104,71 @@
       </div>
     </div>
   </footer>
+
+  <!-- Minimal inline JS (no redirects) -->
+  <script>
+    // mobile nav toggle
+    function toggleMenu(){
+      var nav = document.getElementById('navlinks');
+      if(nav) nav.classList.toggle('open');
+    }
+
+    (function(){
+      const form = document.getElementById('contact-form');
+      const status = document.getElementById('status');
+      const btn = document.getElementById('sendBtn');
+      const ENDPOINT = 'https://formsubmit.co/ajax/forumone178@gmail.com';
+
+      function showStatus(type, msg){
+        status.style.display = 'block';
+        status.className = 'card'; // reset
+        // green/red border cue
+        status.style.borderColor = (type === 'success') ? 'rgba(34,197,94,.5)' : 'rgba(239,68,68,.5)';
+        status.innerHTML = msg;
+        status.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+
+      form.addEventListener('submit', async function(e){
+        e.preventDefault();
+        if(!form.checkValidity()){
+          showStatus('error', '<strong>Please fill all required fields.</strong>');
+          return;
+        }
+
+        btn.disabled = true;
+        const prev = btn.textContent;
+        btn.textContent = 'Sending…';
+
+        const data = {};
+        Array.from(new FormData(form).entries()).forEach(([k,v]) => data[k] = v);
+
+        try {
+          const res = await fetch(ENDPOINT, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+            body: JSON.stringify(data)
+          });
+          if(!res.ok){
+            const t = await res.text();
+            throw new Error('Network response was not ok: ' + t);
+          }
+          await res.json();
+
+          showStatus('success', '<strong>Message sent!</strong> We’ve received your query and will reply to your email.');
+          form.reset();
+        } catch (err) {
+          showStatus('error', 'Sorry, something went wrong while submitting. Please try again.');
+          console.error(err);
+        } finally {
+          btn.disabled = false;
+          btn.textContent = prev;
+        }
+      });
+
+      // footer year
+      const y = document.getElementById('year');
+      if(y) y.textContent = new Date().getFullYear();
+    })();
+  </script>
 </body>
 </html>
